@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>CompTIA Security+ SY0-701 Practice Exam</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <script src="questions.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <main class="exam-container">
+    <header class="page-header">
+      <div>
+        <h1>CompTIA Security+ SY0-701 Practice Exam</h1>
+
+        <p class="page-subtitle">
+          A 90-question exam generated from a
+          180-question practice bank.
+        </p>
+      </div>
+    </header>
+
+    <!-- Compact settings toolbar -->
+    <section
+      id="exam-toolbar"
+      class="exam-toolbar"
+      aria-label="Exam controls"
+    >
+      <div class="toolbar-main-row">
+        <button
+          type="button"
+          id="settings-toggle-button"
+          class="secondary-button toolbar-button"
+          aria-expanded="false"
+          aria-controls="settings-panel"
+        >
+          Settings
+        </button>
+
+        <p
+          id="toolbar-status"
+          class="toolbar-status"
+          aria-live="polite"
+        >
+          No exam is currently active.
+        </p>
+
+        <span
+          id="pending-settings-badge"
+          class="pending-badge"
+          hidden
+        >
+          Pending changes
+        </span>
+
+        <div class="toolbar-actions">
+          <button
+            type="button"
+            id="resume-button"
+            class="secondary-button"
+            hidden
+          >
+            Resume Exam
+          </button>
+
+          <button
+            type="button"
+            id="start-button"
+          >
+            Start New Exam
+          </button>
+        </div>
+      </div>
+
+      <!-- Collapsed settings panel -->
+      <div
+        id="settings-panel"
+        class="settings-panel"
+        hidden
+      >
+        <div class="settings-grid">
+          <label class="settings-field">
+            <span>Testing Mode</span>
+
+            <select id="mode-select">
+              <option value="study">
+                Study Mode
+              </option>
+
+              <option value="exam">
+                Exam Mode
+              </option>
+            </select>
+          </label>
+
+          <label class="setting-option">
+            <input
+              type="checkbox"
+              id="shuffle-questions-checkbox"
+              checked
+            >
+
+            <span>Shuffle question order</span>
+          </label>
+
+          <label class="setting-option">
+            <input
+              type="checkbox"
+              id="shuffle-answers-checkbox"
+              checked
+            >
+
+            <span>Shuffle answer choices</span>
+          </label>
+
+          <label class="setting-option">
+            <input
+              type="checkbox"
+              id="timer-checkbox"
+            >
+
+            <span>Enable 90-minute timer</span>
+          </label>
+        </div>
+
+        <p
+          id="mode-description"
+          class="settings-description"
+        >
+          Study Mode shows the correct answer and
+          explanation after each submitted question.
+        </p>
+
+        <div class="settings-actions">
+          <button
+            type="button"
+            id="commit-settings-button"
+            disabled
+          >
+            Commit Changes
+          </button>
+
+          <button
+            type="button"
+            id="revert-settings-button"
+            class="secondary-button"
+            disabled
+          >
+            Revert Changes
+          </button>
+
+          <button
+            type="button"
+            id="discard-saved-button"
+            class="secondary-button"
+            hidden
+          >
+            Discard Saved Exam
+          </button>
+        </div>
+
+        <p
+          id="settings-feedback"
+          class="settings-feedback"
+          aria-live="polite"
+        ></p>
+      </div>
+    </section>
+
+    <!-- Welcome screen -->
+    <section id="welcome-screen">
+      <h2>Practice Exam</h2>
+
+      <p>
+        Open the settings toolbar to configure the
+        exam, or start using the currently committed
+        settings.
+      </p>
+
+      <div
+        id="saved-exam-summary"
+        class="saved-exam-summary"
+        hidden
+      >
+        <h3>Saved Exam Available</h3>
+
+        <p id="resume-description">
+          A previous exam can be resumed.
+        </p>
+      </div>
+    </section>
+
+    <!-- Active exam -->
+    <section
+      id="exam-screen"
+      hidden
+    >
+      <div class="exam-status">
+        <p id="progress">
+          Question 1 of 90
+        </p>
+
+        <p
+          id="timer"
+          hidden
+        >
+          Time Remaining: 90:00
+        </p>
+      </div>
+
+      <progress
+        id="exam-progress"
+        value="1"
+        max="90"
+        aria-label="Exam progress"
+      ></progress>
+
+      <p
+        id="timer-warning"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+      <div class="navigator-summary">
+        <button
+          type="button"
+          id="toggle-navigator-button"
+          class="secondary-button"
+          aria-expanded="false"
+          aria-controls="question-navigator"
+        >
+          Show Question Navigator
+        </button>
+
+        <p>
+          <span id="answered-count">0</span>
+          answered ·
+          <span id="flagged-count">0</span>
+          flagged
+        </p>
+      </div>
+
+      <nav
+        id="question-navigator"
+        aria-label="Question navigator"
+        hidden
+      ></nav>
+
+      <section class="question-card">
+        <p id="question-domain"></p>
+
+        <h2 id="question-text">
+          Loading question...
+        </h2>
+
+        <form id="answer-form">
+          <fieldset>
+            <legend class="visually-hidden">
+              Select one answer
+            </legend>
+
+            <div id="answer-options"></div>
+
+            <button
+              type="submit"
+              id="submit-answer-button"
+            >
+              Submit Answer
+            </button>
+          </fieldset>
+        </form>
+
+        <p
+          id="feedback"
+          aria-live="polite"
+        ></p>
+      </section>
+
+      <div class="exam-controls">
+        <button
+          type="button"
+          id="previous-button"
+          class="secondary-button"
+        >
+          Previous
+        </button>
+
+        <button
+          type="button"
+          id="flag-button"
+          class="secondary-button"
+          aria-pressed="false"
+        >
+          Flag for Review
+        </button>
+
+        <button
+          type="button"
+          id="next-button"
+        >
+          Next
+        </button>
+
+        <button
+          type="button"
+          id="finish-button"
+          class="warning-button"
+        >
+          Finish Exam
+        </button>
+      </div>
+
+      <p class="keyboard-help">
+        Keyboard: 1–4 select an answer, Enter submits,
+        F flags, and the arrow keys navigate.
+      </p>
+    </section>
+
+    <!-- Final results -->
+    <section
+      id="results-screen"
+      hidden
+    >
+      <h2>Exam Complete</h2>
+
+      <p id="score-text"></p>
+
+      <p id="time-used-text"></p>
+
+      <p id="result-message"></p>
+
+      <section
+        id="weak-domain-panel"
+        class="recommendation-panel"
+      >
+        <h3>Recommended Review Area</h3>
+
+        <p id="weak-domain-text"></p>
+      </section>
+
+      <section id="domain-results">
+        <h3>Domain Results</h3>
+
+        <div id="domain-score-list"></div>
+      </section>
+
+      <div class="result-buttons">
+        <button
+          type="button"
+          id="review-missed-button"
+        >
+          Review Missed Questions
+        </button>
+
+        <button
+          type="button"
+          id="review-all-button"
+          class="secondary-button"
+        >
+          Review All Questions
+        </button>
+
+        <button
+          type="button"
+          id="retry-missed-button"
+          class="secondary-button"
+        >
+          Retry Missed Questions
+        </button>
+
+        <button
+          type="button"
+          id="new-exam-button"
+        >
+          Start New Exam
+        </button>
+      </div>
+
+      <section id="history-section">
+        <h3>Recent Attempts</h3>
+
+        <div id="attempt-history"></div>
+
+        <button
+          type="button"
+          id="clear-history-button"
+          class="secondary-button"
+        >
+          Clear Attempt History
+        </button>
+      </section>
+    </section>
+
+    <!-- Question review -->
+    <section
+      id="review-screen"
+      hidden
+    >
+      <h2 id="review-title">
+        Question Review
+      </h2>
+
+      <div id="review-list"></div>
+
+      <button
+        type="button"
+        id="back-to-results-button"
+      >
+        Back to Results
+      </button>
+    </section>
+
+    <!-- Normal final-submission confirmation -->
+    <dialog id="submit-dialog">
+      <form method="dialog">
+        <h2>Submit Exam?</h2>
+
+        <p id="submit-summary"></p>
+
+        <p>
+          Once submitted, the exam cannot be changed.
+        </p>
+
+        <div class="button-row">
+          <button
+            type="submit"
+            value="cancel"
+            class="secondary-button"
+          >
+            Continue Exam
+          </button>
+
+          <button
+            type="submit"
+            value="confirm"
+            class="warning-button"
+          >
+            Submit Exam
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Settings-change confirmation -->
+    <dialog id="commit-settings-dialog">
+      <form method="dialog">
+        <h2>Commit Settings?</h2>
+
+        <p>
+          Would you like to commit these changes?
+          This will end the test.
+        </p>
+
+        <p>
+          Your current answers will be scored and
+          saved before the new settings are applied.
+        </p>
+
+        <div class="button-row">
+          <button
+            type="submit"
+            value="cancel"
+            class="secondary-button"
+          >
+            Keep Current Test
+          </button>
+
+          <button
+            type="submit"
+            value="confirm"
+            class="warning-button"
+          >
+            End Test and Commit
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Clear history confirmation -->
+    <dialog id="clear-history-dialog">
+      <form method="dialog">
+        <h2>Clear Attempt History?</h2>
+
+        <p>
+          This removes all locally saved attempt
+          results from this browser.
+        </p>
+
+        <div class="button-row">
+          <button
+            type="submit"
+            value="cancel"
+            class="secondary-button"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            value="confirm"
+            class="warning-button"
+          >
+            Clear History
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <noscript>
+      <p>
+        JavaScript must be enabled for this practice
+        exam to work.
+      </p>
+    </noscript>
+  </main>
+</body>
+</html>
