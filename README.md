@@ -1,5 +1,3 @@
-﻿# CompTIA-Security-701-Test-Exam-v0.01
-# CompTIA-Security-701-Test-Exam-v0.01
 # CompTIA Security+ SY0-701 Practice Exam
 
 A browser-based practice exam designed to help users study for the CompTIA Security+ SY0-701 certification exam.
